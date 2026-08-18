@@ -67,6 +67,25 @@
   </div>
 
   <section id="farewell" class="farewell" aria-hidden="true"><div><h2>THANKS FOR PLAYING</h2><div class="farewell-logo">FEANK</div><button class="panel-button" id="return-menu">RETURN TO MENU</button></div></section>
+  <section id="game-shell" class="game-shell" aria-hidden="true">
+    <canvas id="game-canvas" aria-label="FEANK 3D lobby"></canvas>
+    <div id="game-hint" class="game-hint" aria-live="polite">Click to look around · WASD to move</div>
+    <div id="interaction-prompt" class="interaction-prompt" aria-hidden="true"><strong>[ E ]</strong><span>Use Workbench</span></div>
+    <div id="mobile-controls" class="mobile-controls" aria-hidden="true">
+      <div id="move-pad" class="move-pad"><div class="move-knob"></div></div>
+      <div id="look-pad" class="look-pad" aria-label="Drag to look"></div>
+      <button id="mobile-interact" class="mobile-interact" type="button" aria-label="Interact">USE</button>
+    </div>
+    <button id="lobby-menu-button" class="lobby-menu-button" type="button">MENU</button>
+    <section id="workbench-panel" class="workbench-panel" role="dialog" aria-modal="true" aria-labelledby="workbench-title" aria-hidden="true">
+      <p class="eyebrow">EXPEDITION STATION</p><h2 id="workbench-title">WORKBENCH</h2>
+      <button type="button" disabled>MAP <small>COMING SOON</small></button>
+      <button type="button" disabled>GAME SETTINGS <small>COMING SOON</small></button>
+      <button id="workbench-back" type="button">BACK</button>
+    </section>
+  </section>
+  <div id="scene-transition" class="scene-transition" aria-hidden="true"><span>PREPARING THE CABIN…</span></div>
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
