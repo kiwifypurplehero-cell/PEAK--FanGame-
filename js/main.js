@@ -40,17 +40,18 @@ export async function startLobby(mode){
   document.activeElement?.blur();
   transition.classList.add('active');menuScene.classList.add('leaving');overlay.classList.add('leaving');
   await wait(560);transition.classList.add('loading');
+  // Initialize WebGL at its real viewport size while the fade still covers it.
+  shell.classList.add('active');shell.setAttribute('aria-hidden','false');
   try{
     app.lobby=new LobbyGame(canvas,{onWorkbenchChange:open=>{if(app.state===GameState.LOBBY||app.state===GameState.WORKBENCH)app.state=open?GameState.WORKBENCH:GameState.LOBBY}});
     await app.lobby.init();
     menuScene.classList.add('inactive');menuScene.setAttribute('aria-hidden','true');
-    shell.classList.add('active');shell.setAttribute('aria-hidden','false');
     document.querySelector('#mobile-controls').setAttribute('aria-hidden','false');
     document.body.classList.add('in-lobby');app.state=GameState.LOBBY;
     canvas.focus({preventScroll:true});
     await wait(100);transition.classList.remove('active','loading');
   }catch(error){
-    console.error('Unable to initialize the lobby:',error);app.lobby?.dispose();app.lobby=null;app.gameMode=null;delete document.body.dataset.gameMode;
+    console.error('Unable to initialize the lobby:',error);shell.classList.remove('active');shell.setAttribute('aria-hidden','true');app.lobby?.dispose();app.lobby=null;app.gameMode=null;delete document.body.dataset.gameMode;
     menuScene.classList.remove('leaving','inactive');menuScene.setAttribute('aria-hidden','false');overlay.classList.remove('leaving');transition.classList.remove('active','loading');app.state=GameState.MENU;
     document.querySelectorAll('[data-start-lobby]').forEach(button=>button.disabled=false);
     alert('The 3D lobby could not be loaded. Please check your connection and try again.');

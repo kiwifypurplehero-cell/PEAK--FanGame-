@@ -1,7 +1,10 @@
-const colors={wood:'#8b5a32',dark:'#4d3020',plank:'#a76f3e',wall:'#d7b77b',cream:'#ead9aa',green:'#49614b',red:'#80483b',metal:'#555b59'};
+const colors={wood:'#8b5a32',dark:'#4d3020',plank:'#a76f3e',wall:'#d7b77b',cream:'#ead9aa',green:'#49614b',red:'#80483b',metal:'#555b59',grass:'#617849'};
 export function createCabin(scene){
-  const mats=new Map();const mat=(name,color)=>{if(!mats.has(name)){const m=new BABYLON.StandardMaterial(name,scene);m.diffuseColor=BABYLON.Color3.FromHexString(color);m.specularColor=new BABYLON.Color3(.05,.05,.04);mats.set(name,m)}return mats.get(name)};
+  const mats=new Map();const mat=(name,color)=>{if(!mats.has(name)){const m=new BABYLON.StandardMaterial(name,scene);m.diffuseColor=BABYLON.Color3.FromHexString(color);m.ambientColor=m.diffuseColor.scale(.22);m.specularColor=new BABYLON.Color3(.05,.05,.04);mats.set(name,m)}return mats.get(name)};
   const box=(name,pos,scale,color,collide=true)=>{const m=BABYLON.MeshBuilder.CreateBox(name,{width:scale[0],height:scale[1],depth:scale[2]},scene);m.position=new BABYLON.Vector3(...pos);m.material=mat(color,color);m.checkCollisions=collide;m.isPickable=collide;return m};
+  // Keep doors and windows from opening onto a black void without a heavy map.
+  const ground=BABYLON.MeshBuilder.CreateGround('cabin surroundings',{width:44,height:44},scene);ground.position.y=-.42;ground.material=mat('grass',colors.grass);ground.isPickable=false;
+  const sky=BABYLON.MeshBuilder.CreateSphere('stylized sky',{diameter:70,segments:12,sideOrientation:BABYLON.Mesh.BACKSIDE},scene);const skyMat=mat('sky','#6e9eaa');skyMat.emissiveColor=BABYLON.Color3.FromHexString('#527b84');sky.material=skyMat;sky.isPickable=false;
   box('floor',[0,-.2,0],[14,.4,11],'plank');box('ceiling',[0,4.2,0],[14,.25,11],'dark');
   box('back wall',[0,2.05,5.35],[14,4.5,.3],'wall');box('left wall',[-6.85,2.05,0],[.3,4.5,11],'wall');box('right wall',[6.85,2.05,0],[.3,4.5,11],'wall');
   box('front left',[-4.7,2.05,-5.35],[4.3,4.5,.3],'wall');box('front right',[4.7,2.05,-5.35],[4.3,4.5,.3],'wall');box('front header',[0,3.7,-5.35],[5.2,1.2,.3],'wall');
@@ -21,6 +24,6 @@ export function createCabin(scene){
   box('bench',[-3.4,.45,-2.8],[2.3,.45,.7],'green');box('wall map',[-4.9,2.5,-5.12],[2.1,1.3,.06],'cream',false);
   const rope=BABYLON.MeshBuilder.CreateTorus('coiled rope',{diameter:1.05,thickness:.12,tessellation:18},scene);rope.position=new BABYLON.Vector3(5.3,2.2,5.05);rope.rotation.x=Math.PI/2;rope.material=mat('rope','#c69b5d');rope.isPickable=false;
   const lamp=new BABYLON.PointLight('warm cabin lamp',new BABYLON.Vector3(0,3.5,0),scene);lamp.diffuse=BABYLON.Color3.FromHexString('#ffd99a');lamp.intensity=.75;lamp.range=15;scene.ambientColor=new BABYLON.Color3(.3,.28,.23);
-  const outside=new BABYLON.HemisphericLight('window light',new BABYLON.Vector3(0,1,-.2),scene);outside.diffuse=BABYLON.Color3.FromHexString('#9dc9d2');outside.groundColor=BABYLON.Color3.FromHexString('#493923');outside.intensity=.55;
+  const outside=new BABYLON.HemisphericLight('soft ambient light',new BABYLON.Vector3(0,1,-.2),scene);outside.diffuse=BABYLON.Color3.FromHexString('#f6dfbd');outside.groundColor=BABYLON.Color3.FromHexString('#52604b');outside.intensity=.82;
   return {workbench,workbenchTarget:top,interactionPoint:new BABYLON.Vector3(3.7,2.05,2.4)};
 }
