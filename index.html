@@ -15,8 +15,8 @@
     <header class="brand" aria-label="FEANK"><span>F</span><span>E</span><span>A</span><span>N</span><span>K</span></header>
     <nav class="signpost" aria-label="Main menu">
       <div class="post" aria-hidden="true"></div>
-      <button class="plank plank-host" data-panel="host"><span>HOST GAME</span></button>
-      <button class="plank plank-offline" data-panel="offline"><span>PLAY OFFLINE</span></button>
+      <button class="plank plank-host" data-start-lobby="host"><span>HOST GAME</span></button>
+      <button class="plank plank-offline" data-start-lobby="offline"><span>PLAY OFFLINE</span></button>
       <button class="plank plank-settings" data-panel="settings"><span>SETTINGS</span></button>
       <button class="plank plank-credits" data-panel="credits"><span>CREDITS</span></button>
       <button class="plank plank-quit" data-panel="quit"><span>QUIT</span></button>
@@ -25,23 +25,6 @@
   </main>
 
   <div id="overlay" class="overlay" aria-hidden="true">
-    <section class="panel panel-small" data-panel-id="host" role="dialog" aria-modal="true" aria-labelledby="host-title">
-      <h2 id="host-title">HOST GAME</h2>
-      <div class="panel-body">
-        <div class="setting-row"><span>Players</span><strong>1–4</strong></div>
-        <fieldset><legend>Game Visibility</legend><label class="choice"><input type="radio" name="visibility" value="public" checked><span>Public</span></label><label class="choice"><input type="radio" name="visibility" value="private"><span>Private</span></label></fieldset>
-        <button class="panel-button primary" data-placeholder="lobby">CREATE LOBBY</button>
-        <p class="status" aria-live="polite"></p>
-      </div>
-      <button class="panel-button back" data-close>BACK</button>
-    </section>
-
-    <section class="panel panel-small" data-panel-id="offline" role="dialog" aria-modal="true" aria-labelledby="offline-title">
-      <h2 id="offline-title">PLAY OFFLINE</h2>
-      <div class="panel-body centered"><p class="panel-copy">Set out alone. Your expedition will begin here in a future update.</p><button class="panel-button primary" data-placeholder="game">START GAME</button><p class="status" aria-live="polite"></p></div>
-      <button class="panel-button back" data-close>BACK</button>
-    </section>
-
     <section class="panel settings-panel" data-panel-id="settings" role="dialog" aria-modal="true" aria-labelledby="settings-title">
       <h2 id="settings-title">SETTINGS</h2>
       <div class="tabs" role="tablist" aria-label="Settings categories">
@@ -68,7 +51,7 @@
 
   <section id="farewell" class="farewell" aria-hidden="true"><div><h2>THANKS FOR PLAYING</h2><div class="farewell-logo">FEANK</div><button class="panel-button" id="return-menu">RETURN TO MENU</button></div></section>
   <section id="game-shell" class="game-shell" aria-hidden="true">
-    <canvas id="game-canvas" aria-label="FEANK 3D lobby"></canvas>
+    <canvas id="game-canvas" aria-label="FEANK 3D lobby" tabindex="-1"></canvas>
     <div id="game-hint" class="game-hint" aria-live="polite">Click to look around · WASD to move</div>
     <div id="interaction-prompt" class="interaction-prompt" aria-hidden="true"><strong>[ E ]</strong><span>Use Workbench</span></div>
     <div id="mobile-controls" class="mobile-controls" aria-hidden="true">
