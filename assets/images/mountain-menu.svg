@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
- <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#76909c"/><stop offset=".58" stop-color="#d7c9a9"/><stop offset="1" stop-color="#d68e62"/></linearGradient><linearGradient id="rock" x2=".7" y2="1"><stop stop-color="#e4dfcc"/><stop offset=".3" stop-color="#9e9381"/><stop offset=".7" stop-color="#514d49"/><stop offset="1" stop-color="#262e30"/></linearGradient><filter id="soft"><feGaussianBlur stdDeviation="18"/></filter></defs>
- <rect width="1920" height="1080" fill="url(#sky)"/><circle cx="1530" cy="225" r="130" fill="#f5dfae" opacity=".48" filter="url(#soft)"/>
- <path d="M0 690 240 505l185 136 205-248 215 206 168-325 247 299 170-118 490 313v312H0z" fill="#4e6262" opacity=".65"/>
+ <defs><linearGradient id="sky" x2=".18" y2="1"><stop stop-color="#4d27aa"/><stop offset=".38" stop-color="#8655df"/><stop offset=".7" stop-color="#e698ca"/><stop offset="1" stop-color="#f4a06f"/></linearGradient><linearGradient id="rock" x2=".7" y2="1"><stop stop-color="#ffd08d"/><stop offset=".28" stop-color="#e68a70"/><stop offset=".68" stop-color="#84436f"/><stop offset="1" stop-color="#382653"/></linearGradient><radialGradient id="glow"><stop stop-color="#ffd9a2" stop-opacity=".9"/><stop offset="1" stop-color="#ff9da3" stop-opacity="0"/></radialGradient></defs>
+ <rect width="1920" height="1080" fill="url(#sky)"/><circle cx="1360" cy="410" r="430" fill="url(#glow)"/>
+ <path d="M0 690 240 505l185 136 205-248 215 206 168-325 247 299 170-118 490 313v312H0z" fill="#4b3371" opacity=".7"/>
  <path d="M360 1080 525 764l170-72 167-330 111 112 118-291 122 239 132 193 226 465z" fill="url(#rock)"/>
- <path d="m862 362 111 112 118-291 122 239-94-80-40 75-54-52-72 177-66-60-92 188-100 22z" fill="#eee8d7" opacity=".93"/>
- <path d="m1060 441 31-258 50 160 72 79-95-48z" fill="#fff" opacity=".74"/>
- <path d="M0 910q300-115 600 11t590-30q310-150 730 45v144H0z" fill="#253a37"/><path d="M0 970q340-80 675 28t650-21q300-96 595 21v82H0z" fill="#172825"/>
+ <path d="m862 362 111 112 118-291 122 239-94-80-40 75-54-52-72 177-66-60-92 188-100 22z" fill="#ffd79e" opacity=".78"/>
+ <path d="m1060 441 31-258 50 160 72 79-95-48z" fill="#ffe7b7" opacity=".7"/>
+ <path d="M0 910q300-115 600 11t590-30q310-150 730 45v144H0z" fill="#452c61"/><path d="M0 970q340-80 675 28t650-21q300-96 595 21v82H0z" fill="#281d45"/>
  <g fill="#dae0cc" opacity=".55"><circle cx="186" cy="176" r="3"/><circle cx="330" cy="295" r="5"/><circle cx="1450" cy="310" r="4"/><circle cx="1675" cy="155" r="3"/><circle cx="1525" cy="505" r="3"/></g>
 </svg>

@@ -9,3 +9,23 @@
 @media(max-width:650px){.scenery{background-position:58% 50%}.brand{top:max(3vh,env(safe-area-inset-top));font-size:clamp(4.2rem,22vw,6.3rem)}.signpost{left:50%;transform:translateX(-50%);top:19vh;width:min(88vw,390px);height:73vh}.post{left:46%;bottom:-15vh}.plank{height:clamp(55px,8.3vh,70px);font-size:clamp(1.25rem,6vw,1.75rem)}.plank-host{width:100%}.plank-offline{width:94%}.plank-settings{width:76%}.plank-credits{width:71%}.plank-quit{width:58%;top:75%}.unofficial{font-size:.5rem}.panel{padding:24px 20px}.panel h2{margin-bottom:18px}.settings-content{min-height:280px}.tabs button{font-size:.78rem;min-width:78px}}
 @media(min-aspect-ratio:2/1){.brand{left:55%;top:3vh}.signpost{top:17vh}.scenery{background-position:center 43%}}@media(max-height:620px) and (min-width:651px){.brand{font-size:4.8rem}.signpost{top:100px;height:500px;transform:scale(.8);transform-origin:top left}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Full-screen menu composition. These final rules intentionally keep layout and
+   interaction effects compositor-only. */
+html,body{height:100%;height:100dvh;background:#281d45}
+.menu-scene{height:100%;height:100dvh;transition:filter .18s ease}
+.menu-scene.obscured{filter:brightness(.52);transform:none}
+.scenery{inset:0;background-color:#5d38b1;background-position:center 48%}
+.scenery:after{background:linear-gradient(90deg,rgba(35,19,61,.2),transparent 48%),linear-gradient(0deg,rgba(28,18,47,.25),transparent 32%)}
+.brand{top:max(clamp(20px,4vh,54px),env(safe-area-inset-top));left:60%;font-size:clamp(5rem,11vw,9.5rem);letter-spacing:-.075em;text-shadow:0 5px 0 rgba(69,38,104,.2),0 10px 20px rgba(41,24,67,.28);filter:none}
+.brand span:nth-child(1){transform:rotate(-2.5deg) translateY(3px) scaleY(1.04)}.brand span:nth-child(2){transform:rotate(1deg) translateY(-2px)}.brand span:nth-child(3){transform:rotate(-1deg) scaleY(1.05)}.brand span:nth-child(4){transform:rotate(1.5deg) translateY(3px)}.brand span:nth-child(5){transform:rotate(-2deg) translateY(-1px)}
+.signpost{left:max(clamp(18px,6vw,116px),env(safe-area-inset-left));top:clamp(145px,22vh,238px);width:clamp(280px,29vw,470px);height:min(68vh,650px)}
+.post{top:12px;bottom:max(-8vh,-70px);left:43%;width:clamp(34px,3.6vw,58px);background:linear-gradient(90deg,#624025,#ae7948 28%,#80542f 68%,#52341f);box-shadow:7px 9px 11px rgba(38,20,37,.32)}
+.plank{height:clamp(54px,7.5vh,76px);padding-left:10%;color:#342315;background:linear-gradient(174deg,#f9dc9a 0%,#e5b96c 58%,#c58d48 100%);filter:drop-shadow(0 6px 0 #80502d) drop-shadow(4px 7px 5px rgba(39,19,42,.34));font-size:clamp(1.2rem,2.2vw,2.05rem);transition:transform .12s ease,filter .12s ease}.plank:before,.plank:after{width:7px;height:7px}.plank:hover,.plank:focus-visible{transform:rotate(var(--rotation)) translateX(7px) scale(1.025);filter:drop-shadow(0 7px 0 #744628) drop-shadow(5px 9px 6px rgba(39,19,42,.38)) brightness(1.04)}
+.plank-host{top:0;width:100%;--rotation:-.55deg}.plank-offline{top:18%;width:91%;left:4%;--rotation:.45deg}.plank-settings{top:36%;width:73%;left:2%;--rotation:-.4deg}.plank-credits{top:53%;width:65%;left:9%;--rotation:.5deg}.plank-quit{top:71%;width:50%;left:7%;--rotation:-.35deg}
+.overlay{background:rgba(25,15,39,0);transition:background .18s ease,visibility .18s}.overlay.open{background:rgba(25,15,39,.46)}
+.panel{max-height:min(86vh,86dvh,760px);background:linear-gradient(135deg,rgba(67,55,78,.99),rgba(37,30,52,.99));box-shadow:0 18px 45px rgba(22,11,31,.55),inset 0 0 25px rgba(0,0,0,.15)}
+
+@media (max-width:650px){.brand{left:68%;top:max(3vh,env(safe-area-inset-top));font-size:clamp(4.1rem,21vw,6.1rem)}.signpost{left:50%;top:18vh;width:min(86vw,390px);height:76vh}.plank{height:clamp(48px,7.7vh,66px)}}
+@media (max-height:560px) and (min-aspect-ratio:3/2){.brand{left:64%;top:max(10px,env(safe-area-inset-top));font-size:clamp(3.5rem,13vh,5rem)}.signpost{left:max(18px,env(safe-area-inset-left));top:max(56px,14vh);width:clamp(250px,35vw,330px);height:min(78vh,360px);transform:none}.post{width:34px}.plank{height:clamp(39px,10.5vh,50px);font-size:clamp(1rem,3.1vh,1.35rem)}.plank-host{top:0}.plank-offline{top:18%}.plank-settings{top:36%}.plank-credits{top:54%}.plank-quit{top:72%}.unofficial{display:none}.panel{max-height:calc(100dvh - 20px);padding:18px 22px}.panel h2{margin-bottom:12px}.settings-content{min-height:0;padding:12px 4px}.back{margin-top:12px}}
+@media (hover:none),(max-width:900px){.menu-scene.obscured{filter:brightness(.48)}}
