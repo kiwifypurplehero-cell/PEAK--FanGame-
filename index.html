@@ -51,7 +51,7 @@
 
   <section id="farewell" class="farewell" aria-hidden="true"><div><h2>THANKS FOR PLAYING</h2><div class="farewell-logo">FEANK</div><button class="panel-button" id="return-menu">RETURN TO MENU</button></div></section>
   <section id="game-shell" class="game-shell" aria-hidden="true">
-    <canvas id="game-canvas" aria-label="FEANK 3D platform" tabindex="-1"></canvas>
+    <canvas id="game-canvas" aria-label="FEANK compact airport lobby" tabindex="-1"></canvas>
     <div id="game-hint" class="game-hint" aria-live="polite">Click to look around · WASD to move</div>
     <div id="interaction-prompt" class="interaction-prompt" aria-hidden="true"><strong>[ E ]</strong><span>Interact</span></div>
     <div id="mobile-controls" class="mobile-controls" aria-hidden="true">
@@ -61,10 +61,11 @@
       <button id="mobile-jump" class="mobile-jump" type="button" aria-label="Jump">↑</button>
     </div>
     <button id="lobby-menu-button" class="lobby-menu-button" type="button">MENU</button>
-    <section class="lobby-panel" data-lobby-panel="laptop" role="dialog" aria-modal="true" aria-labelledby="laptop-title" aria-hidden="true"><p class="eyebrow">WORKSTATION</p><h2 id="laptop-title">LAPTOP</h2><button type="button" disabled>MAP <small>COMING SOON</small></button><button type="button" disabled>GAME SETTINGS <small>COMING SOON</small></button><button type="button" disabled>MULTIPLAYER <small>COMING SOON</small></button><button type="button" data-lobby-close>BACK</button></section>
+    <section class="lobby-panel" data-lobby-panel="laptop" role="dialog" aria-modal="true" aria-labelledby="laptop-title" aria-hidden="true"><p class="eyebrow">EXPEDITION PREPARATION</p><h2 id="laptop-title">LAPTOP</h2><button type="button" disabled>MAP <small>COMING SOON</small></button><button type="button" disabled>GAME SETTINGS <small>COMING SOON</small></button><button type="button" disabled>MULTIPLAYER <small>COMING SOON</small></button><button type="button" data-lobby-close>BACK</button></section>
+    <section class="lobby-panel" data-lobby-panel="kiosk" role="dialog" aria-modal="true" aria-labelledby="kiosk-title" aria-hidden="true"><p class="eyebrow">AIRPORT SERVICES</p><h2 id="kiosk-title">TERMINAL KIOSK</h2><p class="panel-note">Flight services and expedition check-in will be available in a future update.</p><button type="button" disabled>CHECK IN <small>COMING SOON</small></button><button type="button" data-lobby-close>BACK</button></section>
     <div id="lobby-toast" class="lobby-toast" role="status" aria-live="polite"></div>
   </section>
-  <div id="scene-transition" class="scene-transition" aria-hidden="true"><span>PREPARING THE PLATFORM…</span></div>
+  <div id="scene-transition" class="scene-transition" aria-hidden="true"><span>OPENING THE TERMINAL…</span></div>
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
