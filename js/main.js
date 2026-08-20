@@ -17,13 +17,9 @@ const menu=new MenuController({scene:menuScene,overlay,audio});
 menu.init();
 new SettingsController(document.querySelector('[data-panel-id="settings"]'),audio).init();
 const wait=milliseconds=>new Promise(resolve=>setTimeout(resolve,milliseconds));
-let babylonLoad;
-const loadScript=(source,timeout=8000)=>new Promise((resolve,reject)=>{const script=document.createElement('script'),timer=setTimeout(()=>{script.remove();reject(new Error(`Timed out loading ${source}`))},timeout);script.src=source;script.async=true;script.onload=()=>{clearTimeout(timer);resolve()};script.onerror=()=>{clearTimeout(timer);script.remove();reject(new Error(`Failed to load ${source}`))};document.head.append(script)});
-async function ensureBabylon(){
-  if(window.BABYLON)return window.BABYLON;
-  if(!babylonLoad)babylonLoad=(async()=>{let lastError;for(const source of ['https://cdn.babylonjs.com/babylon.js','https://cdn.jsdelivr.net/npm/babylonjs@8.26.0/babylon.js']){try{await loadScript(source);if(window.BABYLON)return window.BABYLON}catch(error){lastError=error;console.error('[FEANK] Babylon source unavailable.',error)}}throw new Error('Babylon.js could not be loaded from any source',{cause:lastError})})();
-  return babylonLoad;
-}
+const transitionText=transition.querySelector('span');
+const setLoadingStage=stage=>{transitionText.textContent=stage;console.info(`[FEANK] Startup stage: ${stage}`)};
+const initializationTimeout=(lastStage)=>new Promise((_,reject)=>setTimeout(()=>reject(new Error(`Lobby initialization exceeded 8 seconds. Last completed stage: ${lastStage()}`)),8000));
 
 document.querySelectorAll('[data-tab]').forEach(tab=>tab.addEventListener('click',()=>{
   const panel=tab.closest('.settings-panel');panel.querySelectorAll('[data-tab]').forEach(item=>item.setAttribute('aria-selected',String(item===tab)));panel.querySelectorAll('[data-tab-page]').forEach(page=>page.classList.toggle('active',page.dataset.tabPage===tab.dataset.tab));
@@ -40,6 +36,12 @@ document.querySelector('#return-menu').addEventListener('click',()=>{const farew
 
 export async function startLobby(mode){
   if(app.state!==GameState.MENU||!['host','offline'].includes(mode))return;
+  if(!window.BABYLON){
+    const error=new Error('The local vendor/babylon.js script did not initialize window.BABYLON.');
+    console.error('[FEANK] BABYLON FAILED TO INITIALIZE',error);
+    transitionText.textContent='BABYLON FAILED TO INITIALIZE';transition.classList.add('active','loading','failed');
+    setTimeout(()=>{transition.classList.remove('active','loading','failed');transitionText.textContent='OPENING THE TERMINAL…'},3000);return;
+  }
   console.info('[FEANK] Starting lobby',mode);
   app.state=GameState.LOADING_LOBBY;app.sessionMode=mode;
   document.body.dataset.gameMode=mode;
@@ -50,21 +52,22 @@ export async function startLobby(mode){
   await wait(560);transition.classList.add('loading');
   // Initialize WebGL at its real viewport size while the fade still covers it.
   shell.classList.add('active');shell.setAttribute('aria-hidden','false');
+  let lastStage='LOCAL BABYLON READY';
   try{
-    await ensureBabylon();
-    app.lobby=new LobbyGame(canvas,{onPanelChange:open=>{if(app.state===GameState.LOBBY||app.state===GameState.LOBBY_PANEL)app.state=open?GameState.LOBBY_PANEL:GameState.LOBBY}});
-    await app.lobby.init();
+    const reportStage=stage=>{lastStage=stage;setLoadingStage(stage)};
+    app.lobby=new LobbyGame(canvas,{onStage:reportStage,onPanelChange:open=>{if(app.state===GameState.LOBBY||app.state===GameState.LOBBY_PANEL)app.state=open?GameState.LOBBY_PANEL:GameState.LOBBY}});
+    await Promise.race([app.lobby.init(),initializationTimeout(()=>lastStage)]);
     menuScene.classList.add('inactive');menuScene.setAttribute('aria-hidden','true');
     document.querySelector('#mobile-controls').setAttribute('aria-hidden','false');
     document.body.classList.add('in-lobby');app.state=GameState.LOBBY;
     canvas.focus({preventScroll:true});
-    console.info('[FEANK] 10 - Hiding loading screen');transition.classList.remove('active','loading');
+    console.info('[FEANK] 10 - Hiding loading screen');transition.classList.remove('active','loading');transitionText.textContent='OPENING THE TERMINAL…';
   }catch(error){
     console.error('[FEANK] LOBBY FAILED TO LOAD',error);shell.classList.remove('active');shell.setAttribute('aria-hidden','true');app.lobby?.dispose();app.lobby=null;app.sessionMode=null;delete document.body.dataset.gameMode;
-    menuScene.classList.remove('leaving','inactive');menuScene.setAttribute('aria-hidden','false');overlay.classList.remove('leaving');transition.classList.remove('loading');transition.classList.add('failed');transition.querySelector('span').textContent='LOBBY FAILED TO LOAD';app.state=GameState.MENU;
+    menuScene.classList.remove('leaving','inactive');menuScene.setAttribute('aria-hidden','false');overlay.classList.remove('leaving');transition.classList.remove('loading');transition.classList.add('failed');transitionText.textContent=`LOBBY INITIALIZATION ERROR · LAST STEP: ${lastStage}`;app.state=GameState.MENU;
     document.querySelectorAll('[data-start-lobby]').forEach(button=>button.disabled=false);
     document.querySelector('#lobby-toast').textContent='The 3D lobby could not be loaded. Please check your connection.';
-    setTimeout(()=>{transition.classList.remove('active','failed');transition.querySelector('span').textContent='OPENING THE TERMINAL…'},2500);
+    setTimeout(()=>{transition.classList.remove('active','failed');transitionText.textContent='OPENING THE TERMINAL…'},3500);
   }
 }
 

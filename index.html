@@ -66,6 +66,8 @@
     <div id="lobby-toast" class="lobby-toast" role="status" aria-live="polite"></div>
   </section>
   <div id="scene-transition" class="scene-transition" aria-hidden="true"><span>OPENING THE TERMINAL…</span></div>
-  <script type="module" src="js/main.js"></script>
+  <!-- Babylon is vendored with the site: lobby startup never waits for a CDN. -->
+  <script src="vendor/babylon.js?v=8.26.0"></script>
+  <script type="module" src="js/main.js?v=20260820"></script>
 </body>
 </html>
