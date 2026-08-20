@@ -51,22 +51,20 @@
 
   <section id="farewell" class="farewell" aria-hidden="true"><div><h2>THANKS FOR PLAYING</h2><div class="farewell-logo">FEANK</div><button class="panel-button" id="return-menu">RETURN TO MENU</button></div></section>
   <section id="game-shell" class="game-shell" aria-hidden="true">
-    <canvas id="game-canvas" aria-label="FEANK 3D lobby" tabindex="-1"></canvas>
+    <canvas id="game-canvas" aria-label="FEANK 3D platform" tabindex="-1"></canvas>
     <div id="game-hint" class="game-hint" aria-live="polite">Click to look around · WASD to move</div>
     <div id="interaction-prompt" class="interaction-prompt" aria-hidden="true"><strong>[ E ]</strong><span>Interact</span></div>
     <div id="mobile-controls" class="mobile-controls" aria-hidden="true">
       <div id="move-pad" class="move-pad"><div class="move-knob"></div></div>
       <div id="look-pad" class="look-pad" aria-label="Drag to look"></div>
-      <button id="mobile-interact" class="mobile-interact" type="button" aria-label="Interact">USE</button>
+      <button id="mobile-interact" class="mobile-interact" type="button" aria-label="Use Laptop" aria-hidden="true">USE</button>
       <button id="mobile-jump" class="mobile-jump" type="button" aria-label="Jump">↑</button>
     </div>
     <button id="lobby-menu-button" class="lobby-menu-button" type="button">MENU</button>
-    <section class="lobby-panel" data-lobby-panel="invite" role="dialog" aria-modal="true" aria-labelledby="invite-title" aria-hidden="true"><p class="eyebrow">AIRPORT LOBBY</p><h2 id="invite-title">INVITE KIOSK</h2><div class="lobby-slots"><span>HOST</span><strong>YOU</strong><span>SCOUT 02</span><em>OPEN SLOT</em><span>SCOUT 03</span><em>OPEN SLOT</em><span>SCOUT 04</span><em>OPEN SLOT</em></div><p class="panel-note">Friend invitations and online services will connect here in a future update.</p><button type="button" disabled>INVITE PLAYER <small>COMING SOON</small></button><button type="button" data-lobby-close>BACK</button></section>
-    <section class="lobby-panel" data-lobby-panel="expedition" role="dialog" aria-modal="true" aria-labelledby="expedition-title" aria-hidden="true"><p class="eyebrow">DEPARTURE PREPARATION</p><h2 id="expedition-title">SELECT EXPEDITION</h2><button type="button" disabled>MAP <small>COMING SOON</small></button><button type="button" disabled>DIFFICULTY <small>STANDARD</small></button><button type="button" disabled>GAME SETTINGS <small>COMING SOON</small></button><button type="button" disabled>START EXPEDITION <small>NOT READY</small></button><button type="button" data-lobby-close>BACK</button></section>
-    <section class="lobby-panel" data-lobby-panel="settings" role="dialog" aria-modal="true" aria-labelledby="game-config-title" aria-hidden="true"><p class="eyebrow">LOBBY CONTROLS</p><h2 id="game-config-title">GAME CONFIGURATION</h2><button type="button" disabled>PLAYER LIMIT <small>4 SCOUTS</small></button><button type="button" disabled>PRIVACY <small>FRIENDS</small></button><button type="button" disabled>GAME RULES <small>DEFAULT</small></button><button type="button" data-lobby-close>BACK</button></section>
+    <section class="lobby-panel" data-lobby-panel="laptop" role="dialog" aria-modal="true" aria-labelledby="laptop-title" aria-hidden="true"><p class="eyebrow">WORKSTATION</p><h2 id="laptop-title">LAPTOP</h2><button type="button" disabled>MAP <small>COMING SOON</small></button><button type="button" disabled>GAME SETTINGS <small>COMING SOON</small></button><button type="button" disabled>MULTIPLAYER <small>COMING SOON</small></button><button type="button" data-lobby-close>BACK</button></section>
     <div id="lobby-toast" class="lobby-toast" role="status" aria-live="polite"></div>
   </section>
-  <div id="scene-transition" class="scene-transition" aria-hidden="true"><span>PREPARING THE AIRPORT…</span></div>
+  <div id="scene-transition" class="scene-transition" aria-hidden="true"><span>PREPARING THE PLATFORM…</span></div>
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>

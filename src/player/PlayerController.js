@@ -1,4 +1,4 @@
-export const LOBBY_SPAWN=Object.freeze({position:Object.freeze({x:0,y:1.72,z:-7.2}),target:Object.freeze({x:-7.4,y:2.05,z:-5.4})});
+export const LOBBY_SPAWN=Object.freeze({position:Object.freeze({x:0,y:1.72,z:-4.5}),target:Object.freeze({x:0,y:1.55,z:0})});
 export class PlayerController {
   constructor(scene,canvas){
     this.scene=scene;this.canvas=canvas;this.enabled=true;this.mobile=matchMedia('(pointer: coarse)').matches;this.move={x:0,y:0};this.time=0;this.interactionAnimation=0;this.jumpReaction=0;this.grounded=true;
