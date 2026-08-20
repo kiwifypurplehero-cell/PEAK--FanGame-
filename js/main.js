@@ -3,8 +3,8 @@ import {MenuController} from './menu.js';
 import {SettingsController} from './settings.js';
 import {LobbyGame} from '../src/core/LobbyGame.js';
 
-const GameState=Object.freeze({MENU:'MENU',LOADING_LOBBY:'LOADING_LOBBY',LOBBY:'LOBBY',WORKBENCH:'WORKBENCH'});
-const app={state:GameState.MENU,gameMode:null,lobby:null};
+const GameState=Object.freeze({MENU:'MENU',LOADING_LOBBY:'LOADING_LOBBY',LOBBY:'LOBBY',LOBBY_PANEL:'LOBBY_PANEL'});
+const app={state:GameState.MENU,sessionMode:null,lobby:null};
 window.FEANK=app;
 
 const audio=new AudioController();
@@ -33,7 +33,7 @@ document.querySelector('#return-menu').addEventListener('click',()=>{const farew
 
 export async function startLobby(mode){
   if(app.state!==GameState.MENU||!['host','offline'].includes(mode))return;
-  app.state=GameState.LOADING_LOBBY;app.gameMode=mode;
+  app.state=GameState.LOADING_LOBBY;app.sessionMode=mode;
   document.body.dataset.gameMode=mode;
   document.querySelectorAll('[data-start-lobby]').forEach(button=>button.disabled=true);
   menu.close({restoreFocus:false});
@@ -43,7 +43,7 @@ export async function startLobby(mode){
   // Initialize WebGL at its real viewport size while the fade still covers it.
   shell.classList.add('active');shell.setAttribute('aria-hidden','false');
   try{
-    app.lobby=new LobbyGame(canvas,{onWorkbenchChange:open=>{if(app.state===GameState.LOBBY||app.state===GameState.WORKBENCH)app.state=open?GameState.WORKBENCH:GameState.LOBBY}});
+    app.lobby=new LobbyGame(canvas,{onPanelChange:open=>{if(app.state===GameState.LOBBY||app.state===GameState.LOBBY_PANEL)app.state=open?GameState.LOBBY_PANEL:GameState.LOBBY}});
     await app.lobby.init();
     menuScene.classList.add('inactive');menuScene.setAttribute('aria-hidden','true');
     document.querySelector('#mobile-controls').setAttribute('aria-hidden','false');
@@ -51,20 +51,20 @@ export async function startLobby(mode){
     canvas.focus({preventScroll:true});
     await wait(100);transition.classList.remove('active','loading');
   }catch(error){
-    console.error('Unable to initialize the lobby:',error);shell.classList.remove('active');shell.setAttribute('aria-hidden','true');app.lobby?.dispose();app.lobby=null;app.gameMode=null;delete document.body.dataset.gameMode;
+    console.error('Unable to initialize the lobby:',error);shell.classList.remove('active');shell.setAttribute('aria-hidden','true');app.lobby?.dispose();app.lobby=null;app.sessionMode=null;delete document.body.dataset.gameMode;
     menuScene.classList.remove('leaving','inactive');menuScene.setAttribute('aria-hidden','false');overlay.classList.remove('leaving');transition.classList.remove('active','loading');app.state=GameState.MENU;
     document.querySelectorAll('[data-start-lobby]').forEach(button=>button.disabled=false);
-    alert('The 3D lobby could not be loaded. Please check your connection and try again.');
+    document.querySelector('#lobby-toast').textContent='The 3D lobby could not be loaded. Please check your connection.';
   }
 }
 
 async function leaveLobby(){
-  if(![GameState.LOBBY,GameState.WORKBENCH].includes(app.state))return;
+  if(![GameState.LOBBY,GameState.LOBBY_PANEL].includes(app.state))return;
   app.state=GameState.LOADING_LOBBY;transition.classList.add('active');await wait(560);
   if(document.pointerLockElement)await document.exitPointerLock?.();
   shell.classList.remove('active');shell.setAttribute('aria-hidden','true');app.lobby?.dispose();app.lobby=null;
   document.querySelector('#mobile-controls').setAttribute('aria-hidden','true');
-  document.body.classList.remove('in-lobby');delete document.body.dataset.gameMode;app.gameMode=null;
+  document.body.classList.remove('in-lobby');delete document.body.dataset.gameMode;app.sessionMode=null;
   menuScene.classList.remove('leaving','inactive','obscured');menuScene.setAttribute('aria-hidden','false');overlay.classList.remove('leaving','open');
   document.querySelectorAll('[data-start-lobby]').forEach(button=>button.disabled=false);
   app.state=GameState.MENU;await wait(100);transition.classList.remove('active','loading');document.querySelector('[data-start-lobby="offline"]').focus();
