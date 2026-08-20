@@ -1,9 +1,9 @@
 export const LOBBY_SPAWN=Object.freeze({position:Object.freeze({x:0,y:1.72,z:-4.5}),target:Object.freeze({x:0,y:1.55,z:1})});
 
 export class PlayerController{
-  constructor(scene,canvas){
+  constructor(scene,canvas,spawn=LOBBY_SPAWN){
     this.scene=scene;this.canvas=canvas;this.enabled=true;this.mobile=matchMedia('(pointer: coarse)').matches;this.move={x:0,y:0};this.time=0;this.interactionAnimation=0;this.jumpImpulse=0;this.landReaction=0;this.grounded=true;this.wasGrounded=true;this.smoothedVelocity=new BABYLON.Vector2();
-    const {position,target}=LOBBY_SPAWN;
+    const {position,target}=spawn;
     this.camera=new BABYLON.UniversalCamera('PlayerCamera',new BABYLON.Vector3(position.x,position.y,position.z),scene);this.camera.setTarget(new BABYLON.Vector3(target.x,target.y,target.z));this.camera.minZ=.045;this.camera.maxZ=90;this.camera.fov=BABYLON.Tools.ToRadians(70);this.camera.speed=.135;this.camera.inertia=.66;this.camera.angularSensibility=3000;this.camera.applyGravity=true;this.camera.checkCollisions=true;this.camera.ellipsoid.set(.42,.86,.42);this.camera.ellipsoidOffset.set(0,-.86,0);this.camera.keysUp=[87];this.camera.keysDown=[83];this.camera.keysLeft=[65];this.camera.keysRight=[68];this.camera.attachControl(canvas,true);this.camera.inputs.attached.mouse.buttons=[0];scene.activeCamera=this.camera;
     this.createBody();this.createViewArms();this.setupPointerLock();this.setupJump();this.setupTouch();
   }

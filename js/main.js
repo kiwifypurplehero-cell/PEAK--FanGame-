@@ -33,6 +33,7 @@ document.querySelector('#return-menu').addEventListener('click',()=>{const farew
 
 export async function startLobby(mode){
   if(app.state!==GameState.MENU||!['host','offline'].includes(mode))return;
+  console.info('[FEANK] Starting lobby',mode);
   app.state=GameState.LOADING_LOBBY;app.sessionMode=mode;
   document.body.dataset.gameMode=mode;
   document.querySelectorAll('[data-start-lobby]').forEach(button=>button.disabled=true);
