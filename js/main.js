@@ -1,9 +1,9 @@
-import {AudioController} from './audio.js?v=20260821-0915';
-import {MenuController} from './menu.js?v=20260821-0915';
-import {SettingsController} from './settings.js?v=20260821-0915';
-import {LobbyGame} from '../src/core/LobbyGame.js?v=20260821-0915';
+import {AudioController} from './audio.js?v=20260821-RENDER-DIAG-01';
+import {MenuController} from './menu.js?v=20260821-RENDER-DIAG-01';
+import {SettingsController} from './settings.js?v=20260821-RENDER-DIAG-01';
+import {LobbyGame} from '../src/core/LobbyGame.js?v=20260821-RENDER-DIAG-01';
 
-const FEANK_BUILD = '20260821-0915';
+const FEANK_BUILD = '20260821-RENDER-DIAG-01';
 window.FEANK_BUILD = FEANK_BUILD;
 console.info('[FEANK] BUILD', FEANK_BUILD);
 
@@ -68,7 +68,7 @@ export async function startLobby(mode){
     console.info('[FEANK] 10 - Hiding loading screen');transition.classList.remove('active','loading');transitionText.textContent='OPENING THE TERMINAL…';
   }catch(error){
     console.error('[FEANK] LOBBY FAILED TO LOAD',error);shell.classList.remove('active');shell.setAttribute('aria-hidden','true');app.lobby?.dispose();app.lobby=null;app.sessionMode=null;delete document.body.dataset.gameMode;
-    menuScene.classList.remove('leaving','inactive');menuScene.setAttribute('aria-hidden','false');overlay.classList.remove('leaving');transition.classList.remove('loading');transition.classList.add('failed');transitionText.textContent=`LOBBY INITIALIZATION ERROR · BUILD 20260821-0915 · LAST STEP: ${lastStage}`;app.state=GameState.MENU;
+    menuScene.classList.remove('leaving','inactive');menuScene.setAttribute('aria-hidden','false');overlay.classList.remove('leaving');transition.classList.remove('loading');transition.classList.add('failed');transitionText.textContent=`LOBBY INITIALIZATION ERROR · BUILD 20260821-RENDER-DIAG-01 · LAST STEP: ${lastStage}`;app.state=GameState.MENU;
     document.querySelectorAll('[data-start-lobby]').forEach(button=>button.disabled=false);
     document.querySelector('#lobby-toast').textContent='The 3D lobby could not be loaded. Please check your connection.';
     setTimeout(()=>{transition.classList.remove('active','failed');transitionText.textContent='OPENING THE TERMINAL…'},3500);
