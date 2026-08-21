@@ -11,15 +11,17 @@
 <body>
   <main id="menu-scene" class="menu-scene">
     <div id="pixi-menu" aria-hidden="true"></div>
-    <nav class="signpost" aria-label="Main menu">
-      <div class="post" aria-hidden="true"></div>
-      <button class="plank host" data-maintenance><span>HOST GAME</span><small>MAINTENANCE</small></button>
-      <button class="plank offline" data-maintenance><span>PLAY OFFLINE</span><small>MAINTENANCE</small></button>
-      <button class="plank settings" data-panel="settings"><span>SETTINGS</span></button>
-      <button class="plank credits" data-panel="credits"><span>CREDITS</span></button>
-      <button class="plank quit" data-panel="quit"><span>QUIT</span></button>
-    </nav>
-    <p class="unofficial">UNOFFICIAL FAN PROJECT</p>
+    <div class="ui-composition">
+      <nav class="signpost" aria-label="Main menu">
+        <div class="post" aria-hidden="true"></div>
+        <button class="plank host" data-maintenance><span>HOST GAME</span><small>MAINTENANCE</small></button>
+        <button class="plank offline" data-maintenance><span>PLAY OFFLINE</span><small>MAINTENANCE</small></button>
+        <button class="plank settings" data-panel="settings"><span>SETTINGS</span></button>
+        <button class="plank credits" data-panel="credits"><span>CREDITS</span></button>
+        <button class="plank quit" data-panel="quit"><span>QUIT</span></button>
+      </nav>
+      <p class="unofficial">UNOFFICIAL FAN PROJECT</p>
+    </div>
   </main>
   <div id="overlay" class="overlay" aria-hidden="true">
     <section class="panel panel-tiny" data-panel-id="maintenance" role="dialog" aria-modal="true" aria-labelledby="maintenance-title"><p class="eyebrow">EXPEDITION STATUS</p><h2 id="maintenance-title">UNDER MAINTENANCE</h2><p>THIS MODE IS CURRENTLY UNDER MAINTENANCE</p><button class="panel-button" data-close>BACK</button></section>
