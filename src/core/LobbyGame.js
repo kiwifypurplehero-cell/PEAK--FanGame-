@@ -16,7 +16,7 @@ export class LobbyGame {
     this.onStage('BUILDING TERMINAL...');console.info('[FEANK] 4 - Building airport');
     const world=createAirportLobby(scene);console.info('[FEANK] 5 - Airport ready');
     this.onStage('CREATING PLAYER...');console.info('[FEANK] 6 - Creating player');this.player=new PlayerController(scene,this.canvas,world.spawn);console.info('[FEANK] 7 - Player ready');
-    try{this.interactions=new InteractionManager(scene,this.player.camera,document.querySelector('#interaction-prompt'));this.ui=new LobbyPanelUI(open=>{this.player.setEnabled(!open);this.interactions.enabled=!open;if(open)this.interactions.select(null);this.onPanelChange(open)});
+    try{this.interactions=new InteractionManager(scene,this.player.camera,document.querySelector('#interaction-prompt'));this.ui=new LobbyPanelUI(open=>{this.player.setEnabled(!open);this.interactions.enabled=!open;if(open)this.interactions.select(null);this.onPanelChange(open)},color=>this.player.setCharacterColor(color));
     const register=(mesh,name,text,point,action,distance=3.2)=>this.interactions.register({mesh,interactableName:name,interactionText:text,interactionDistance:distance,interactionKey:'e',interactionPoint:point,interactionAction:()=>{this.player.playInteraction();action()}});
     register(world.laptop,'Laptop','Use Laptop',world.laptopPoint,()=>this.ui.show('laptop'),2.8);
     register(world.kiosk,'Terminal Kiosk','Check Kiosk',world.kioskPoint,()=>this.ui.show('kiosk'),2.7);
