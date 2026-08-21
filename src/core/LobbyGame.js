@@ -1,5 +1,5 @@
 import {EngineManager} from './EngineManager.js?v=20260821-MOBILE-RENDER-FIX-01';
-import {createAirportLobby} from '../world/createAirportLobby.js?v=20260821-MOBILE-RENDER-FIX-01';
+import {createAirportLobby} from '../world/createAirportLobby.js?v=20260821-LOBBY-REBUILD-01';
 import {PlayerController} from '../player/PlayerController.js?v=20260821-MOBILE-RENDER-FIX-01';
 import {InteractionManager} from '../interactions/InteractionManager.js?v=20260821-MOBILE-RENDER-FIX-01';
 import {LobbyPanelUI} from '../ui/LobbyPanelUI.js?v=20260821-MOBILE-RENDER-FIX-01';
@@ -42,7 +42,7 @@ export class LobbyGame {
     this.onStage('LOADING ENGINE...');
     const engine=this.core.create();console.info('[FEANK] 2 - Engine ready');
     const isMobile=matchMedia('(max-width: 800px), (pointer: coarse)').matches;
-    const scene=new BABYLON.Scene(engine);this.core.scene=scene;scene.collisionsEnabled=true;scene.gravity=new BABYLON.Vector3(0,0,0);scene.imageProcessingConfiguration.exposure=1.05;scene.imageProcessingConfiguration.contrast=1;scene.imageProcessingConfiguration.isEnabled=!isMobile;scene.postProcessesEnabled=!isMobile;scene.shadowsEnabled=!isMobile;scene.skipPointerMovePicking=true;console.info('[FEANK] 3 - Scene created',{isMobile,imageProcessing:!isMobile,postProcessing:!isMobile,shadows:!isMobile});
+    const scene=new BABYLON.Scene(engine);this.core.scene=scene;scene.collisionsEnabled=true;scene.gravity=new BABYLON.Vector3(0,0,0);scene.imageProcessingConfiguration.isEnabled=false;scene.postProcessesEnabled=false;scene.shadowsEnabled=false;scene.skipPointerMovePicking=true;console.info('[FEANK] 3 - Scene created',{isMobile,imageProcessing:false,postProcessing:false,shadows:false});
     // Prove that this WebGL context can render before building decorative geometry.
     const probeCamera=new BABYLON.FreeCamera('startup render probe',BABYLON.Vector3.Zero(),scene);scene.render();probeCamera.dispose();console.info('[FEANK] 3a - Minimal WebGL frame rendered');
     this.onStage('BUILDING TERMINAL...');console.info('[FEANK] 4 - Building airport');
@@ -66,7 +66,7 @@ export class LobbyGame {
     this.onStage('R3 · BEFORE FIRST SCENE RENDER');
     const renderStart=performance.now();
     validateSceneForFirstRender(scene,this.player);
-    try{scene.render()}catch(error){this.onStage(errorText(error));console.error(error);console.error(error.stack);isolateRenderFailure(scene,[...world.diagnosticGroups,this.player.diagnosticGroup],this.onStage,error);throw error}
+    try{scene.render()}catch(error){this.onStage(errorText(error));console.error(error);console.error(error.stack);isolateRenderFailure(scene,[this.player.diagnosticGroup],this.onStage,error);throw error}
     console.info('[FEANK] scene.render duration:',performance.now()-renderStart);
     console.info('[FEANK][R2] AFTER scene.render()');
     this.onStage('R4 · FIRST SCENE RENDER OK');
@@ -83,7 +83,7 @@ export class LobbyGame {
     this.onStage('LOBBY READY');
     // Procedural meshes are ready synchronously. Waiting for Scene.whenReadyAsync here
     // could wait forever on an optional texture/shader and used to block this return.
-    console.info('[FEANK] Airport lobby ready',{camera:this.player.camera.position.asArray(),spawnSafe:true,meshes:scene.meshes.length,lights:scene.lights.length,lighting:'sunrise + fill + practical',renderLoops:1});
+    console.info('[FEANK] Airport lobby ready',{camera:this.player.camera.position.asArray(),spawnSafe:true,meshes:scene.meshes.length,lights:scene.lights.length,lighting:'hemispheric + directional sunrise',renderLoops:1});
   }
   pause(){this.core.engine?.stopRenderLoop()}
   dispose(){if(this.mobileInteract){this.mobileInteract.onclick=null;this.mobileInteract.classList.remove('visible');this.mobileInteract.setAttribute('aria-hidden','true')}this.ui?.dispose();this.interactions?.dispose();this.player?.dispose();this.core.dispose()}
