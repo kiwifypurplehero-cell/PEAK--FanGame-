@@ -1,8 +1,8 @@
-import {EngineManager} from './EngineManager.js';
-import {createAirportLobby} from '../world/createAirportLobby.js';
-import {PlayerController} from '../player/PlayerController.js';
-import {InteractionManager} from '../interactions/InteractionManager.js';
-import {LobbyPanelUI} from '../ui/LobbyPanelUI.js';
+import {EngineManager} from './EngineManager.js?v=20260821-0915';
+import {createAirportLobby} from '../world/createAirportLobby.js?v=20260821-0915';
+import {PlayerController} from '../player/PlayerController.js?v=20260821-0915';
+import {InteractionManager} from '../interactions/InteractionManager.js?v=20260821-0915';
+import {LobbyPanelUI} from '../ui/LobbyPanelUI.js?v=20260821-0915';
 
 export class LobbyGame {
   constructor(canvas,{onPanelChange=()=>{},onStage=()=>{}}={}){this.canvas=canvas;this.core=new EngineManager(canvas);this.onPanelChange=onPanelChange;this.onStage=onStage}
