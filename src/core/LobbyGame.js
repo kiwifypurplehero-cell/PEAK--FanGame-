@@ -1,8 +1,8 @@
-import {EngineManager} from './EngineManager.js?v=20260821-0915';
-import {createAirportLobby} from '../world/createAirportLobby.js?v=20260821-0915';
-import {PlayerController} from '../player/PlayerController.js?v=20260821-0915';
-import {InteractionManager} from '../interactions/InteractionManager.js?v=20260821-0915';
-import {LobbyPanelUI} from '../ui/LobbyPanelUI.js?v=20260821-0915';
+import {EngineManager} from './EngineManager.js?v=20260821-RENDER-DIAG-01';
+import {createAirportLobby} from '../world/createAirportLobby.js?v=20260821-RENDER-DIAG-01';
+import {PlayerController} from '../player/PlayerController.js?v=20260821-RENDER-DIAG-01';
+import {InteractionManager} from '../interactions/InteractionManager.js?v=20260821-RENDER-DIAG-01';
+import {LobbyPanelUI} from '../ui/LobbyPanelUI.js?v=20260821-RENDER-DIAG-01';
 
 export class LobbyGame {
   constructor(canvas,{onPanelChange=()=>{},onStage=()=>{}}={}){this.canvas=canvas;this.core=new EngineManager(canvas);this.onPanelChange=onPanelChange;this.onStage=onStage}
@@ -22,11 +22,29 @@ export class LobbyGame {
     register(world.kiosk,'Terminal Kiosk','Check Kiosk',world.kioskPoint,()=>this.ui.show('kiosk'),2.7);
     this.mobileInteract=document.querySelector('#mobile-interact');this.mobileInteract.onclick=()=>this.interactions.interact();}catch(error){console.error('[FEANK] Interaction system failed; continuing with a playable lobby.',error)}
     console.info('[FEANK] 8 - Interaction system ready');scene.onBeforeRenderObservable.add(()=>{this.player.update();if(!this.interactions)return;this.interactions.update();const available=!!this.interactions.current;this.mobileInteract.classList.toggle('visible',available);this.mobileInteract.setAttribute('aria-hidden',String(!available))});
-    this.onStage('STARTING RENDERER...');
-    try{engine.resize()}catch(error){console.error('[FEANK] engine.resize() failed',error);throw error}
-    try{scene.render()}catch(error){console.error('[FEANK] scene.render() failed',error);throw error}
-    console.info('[FEANK] 9 - Starting render loop');
-    try{this.core.run(scene)}catch(error){console.error('[FEANK] EngineManager.run(scene) failed',error);throw error}
+    this.onStage('R1 · BEFORE ENGINE RESIZE');
+    console.info('[FEANK][R1] BEFORE engine.resize()');
+    const resizeStart=performance.now();
+    try{engine.resize()}catch(error){this.onStage('R-ERROR · ENGINE.RESIZE');console.error('[FEANK] engine.resize() failed',error);throw error}
+    console.info('[FEANK] engine.resize duration:',performance.now()-resizeStart);
+    console.info('[FEANK][R1] AFTER engine.resize()');
+    this.onStage('R2 · ENGINE RESIZE OK');
+
+    console.info('[FEANK][R2] BEFORE scene.render()');
+    this.onStage('R3 · BEFORE FIRST SCENE RENDER');
+    const renderStart=performance.now();
+    try{scene.render()}catch(error){this.onStage('R-ERROR · SCENE.RENDER');console.error('[FEANK] scene.render() failed',error);throw error}
+    console.info('[FEANK] scene.render duration:',performance.now()-renderStart);
+    console.info('[FEANK][R2] AFTER scene.render()');
+    this.onStage('R4 · FIRST SCENE RENDER OK');
+
+    console.info('[FEANK][R3] BEFORE EngineManager.run()');
+    this.onStage('R5 · BEFORE RENDER LOOP');
+    const runStart=performance.now();
+    try{this.core.run(scene)}catch(error){this.onStage('R-ERROR · ENGINEMANAGER.RUN');console.error('[FEANK] EngineManager.run(scene) failed',error);throw error}
+    console.info('[FEANK] EngineManager.run duration:',performance.now()-runStart);
+    console.info('[FEANK][R3] AFTER EngineManager.run()');
+    this.onStage('R6 · RENDER LOOP STARTED');
     this.onStage('LOBBY READY');
     // Procedural meshes are ready synchronously. Waiting for Scene.whenReadyAsync here
     // could wait forever on an optional texture/shader and used to block this return.

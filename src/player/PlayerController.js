@@ -1,4 +1,4 @@
-import {CharacterVisualController,CharacterVisualState} from './CharacterVisualController.js?v=20260821-0915';
+import {CharacterVisualController,CharacterVisualState} from './CharacterVisualController.js?v=20260821-RENDER-DIAG-01';
 export {CharacterVisualState};
 export const LOBBY_SPAWN=Object.freeze({position:{x:0,y:1.72,z:-4.5},target:{x:0,y:1.55,z:1}});
 export const PLAYER_MOVEMENT=Object.freeze({walkSpeed:5.2,runSpeed:8,acceleration:28,deceleration:34,airControl:.4,gravity:22,jumpVelocity:6,coyoteTime:.1,jumpBuffer:.12,groundProbe:.1,lookSensitivity:.0032,maxPitch:1.35,maxDeltaTime:.05});
