@@ -10,7 +10,7 @@ export class LobbyGame {
     console.info('[FEANK] 1 - Starting lobby');
     this.onStage('LOADING ENGINE...');
     const engine=this.core.create();console.info('[FEANK] 2 - Engine ready');
-    const scene=new BABYLON.Scene(engine);this.core.scene=scene;scene.collisionsEnabled=true;scene.gravity=new BABYLON.Vector3(0,-.22,0);scene.imageProcessingConfiguration.exposure=1.05;scene.imageProcessingConfiguration.contrast=1;scene.skipPointerMovePicking=true;console.info('[FEANK] 3 - Scene created');
+    const scene=new BABYLON.Scene(engine);this.core.scene=scene;scene.collisionsEnabled=true;scene.gravity=new BABYLON.Vector3(0,0,0);scene.imageProcessingConfiguration.exposure=1.05;scene.imageProcessingConfiguration.contrast=1;scene.skipPointerMovePicking=true;console.info('[FEANK] 3 - Scene created');
     // Prove that this WebGL context can render before building decorative geometry.
     const probeCamera=new BABYLON.FreeCamera('startup render probe',BABYLON.Vector3.Zero(),scene);scene.render();probeCamera.dispose();console.info('[FEANK] 3a - Minimal WebGL frame rendered');
     this.onStage('BUILDING TERMINAL...');console.info('[FEANK] 4 - Building airport');
