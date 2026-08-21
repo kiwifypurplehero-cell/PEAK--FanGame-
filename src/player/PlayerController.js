@@ -1,15 +1,29 @@
-import {CharacterVisualController,CharacterVisualState} from './CharacterVisualController.js?v=20260821-RENDER-DIAG-01';
+import {CharacterVisualController,CharacterVisualState} from './CharacterVisualController.js?v=20260821-MOBILE-RENDER-FIX-01';
 export {CharacterVisualState};
 export const LOBBY_SPAWN=Object.freeze({position:{x:0,y:1.72,z:-4.5},target:{x:0,y:1.55,z:1}});
 export const PLAYER_MOVEMENT=Object.freeze({walkSpeed:5.2,runSpeed:8,acceleration:28,deceleration:34,airControl:.4,gravity:22,jumpVelocity:6,coyoteTime:.1,jumpBuffer:.12,groundProbe:.1,lookSensitivity:.0032,maxPitch:1.35,maxDeltaTime:.05});
 const approach=(v,t,n)=>v<t?Math.min(v+n,t):Math.max(v-n,t);
+const requireFinite=(label,value)=>{if(!Number.isFinite(value))throw new TypeError(`[PLAYER] ${label} must be finite; received ${String(value)}`);return value};
 
 export class PlayerController{
   constructor(scene,canvas,spawn=LOBBY_SPAWN,settings=PLAYER_MOVEMENT){
+    console.info('[FEANK][SCENE GROUP] PLAYER - begin');
+    for(const axis of ['x','y','z']){requireFinite(`spawn.position.${axis}`,spawn?.position?.[axis]);requireFinite(`spawn.target.${axis}`,spawn?.target?.[axis])}
+    for(const [name,value] of Object.entries(settings||{}))requireFinite(`settings.${name}`,value);
+    const meshStart=scene.meshes.length,transformStart=scene.transformNodes.length;
     Object.assign(this,{scene,canvas,settings,enabled:true,mobile:matchMedia('(pointer: coarse)').matches,move:{x:0,y:0},keys:new Set(),visualOverride:null,time:0,interactionAnimation:0,landReaction:0,isGrounded:true,verticalVelocity:0,jumpRequested:false,jumpBufferRemaining:0,coyoteRemaining:settings.coyoteTime});
     this.horizontalVelocity=new BABYLON.Vector3();this.desiredVelocity=new BABYLON.Vector3();this.frameMotion=new BABYLON.Vector3();this.forward=new BABYLON.Vector3();this.right=new BABYLON.Vector3();this.groundRay=new BABYLON.Ray(BABYLON.Vector3.Zero(),new BABYLON.Vector3(0,-1,0),2);
     this.camera=new BABYLON.UniversalCamera('PlayerCamera',new BABYLON.Vector3(spawn.position.x,spawn.position.y,spawn.position.z),scene);this.camera.setTarget(new BABYLON.Vector3(spawn.target.x,spawn.target.y,spawn.target.z));this.camera.minZ=.045;this.camera.maxZ=90;this.camera.fov=BABYLON.Tools.ToRadians(70);this.camera.applyGravity=false;this.camera.checkCollisions=true;this.camera.ellipsoid.set(.42,.86,.42);this.camera.ellipsoidOffset.set(0,-.86,0);this.camera.inputs.clear();scene.activeCamera=this.camera;
     this.createBody();this.visuals=new CharacterVisualController(scene,this.camera,[this.torso,this.head,...this.bodyColorMeshes]);this.setupDesktop();this.setupInput();this.setupTouch();
+    this.validateRenderState();
+    this.diagnosticGroup={name:'PLAYER',nodes:[...scene.meshes.slice(meshStart),...scene.transformNodes.slice(transformStart)],lights:[]};this.diagnosticGroup.nodes.forEach(node=>{node.metadata={...(node.metadata||{}),diagnosticGroup:'PLAYER'}});
+    console.info('[FEANK][SCENE GROUP] PLAYER - ready',{nodes:this.diagnosticGroup.nodes.length});
+  }
+  validateRenderState(){
+    const vectors={cameraPosition:this.camera.position,cameraRotation:this.camera.rotation,cameraEllipsoid:this.camera.ellipsoid,cameraEllipsoidOffset:this.camera.ellipsoidOffset,playerPosition:this.playerRoot.position,playerRotation:this.playerRoot.rotation};
+    for(const [name,vector] of Object.entries(vectors))for(const axis of ['x','y','z'])requireFinite(`${name}.${axis}`,vector?.[axis]);
+    for(const name of ['minZ','maxZ','fov'])requireFinite(`camera.${name}`,this.camera[name]);
+    if(this.camera.minZ<=0||this.camera.maxZ<=this.camera.minZ||this.camera.fov<=0||this.camera.fov>=Math.PI)throw new RangeError('[PLAYER] Camera clipping planes or field of view are invalid');
   }
   makeMaterial(name,hex){const m=new BABYLON.StandardMaterial(name,this.scene),c=BABYLON.Color3.FromHexString(hex);m.diffuseColor=c;m.ambientColor=c.scale(.42);m.specularColor=new BABYLON.Color3(.035,.035,.035);return m}
   createBody(){
