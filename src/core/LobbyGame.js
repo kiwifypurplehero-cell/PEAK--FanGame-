@@ -22,9 +22,12 @@ export class LobbyGame {
     register(world.kiosk,'Terminal Kiosk','Check Kiosk',world.kioskPoint,()=>this.ui.show('kiosk'),2.7);
     this.mobileInteract=document.querySelector('#mobile-interact');this.mobileInteract.onclick=()=>this.interactions.interact();}catch(error){console.error('[FEANK] Interaction system failed; continuing with a playable lobby.',error)}
     console.info('[FEANK] 8 - Interaction system ready');scene.onBeforeRenderObservable.add(()=>{this.player.update();if(!this.interactions)return;this.interactions.update();const available=!!this.interactions.current;this.mobileInteract.classList.toggle('visible',available);this.mobileInteract.setAttribute('aria-hidden',String(!available))});
-    this.onStage('STARTING RENDERER...');engine.resize();scene.render();console.info('[FEANK] 9 - Starting render loop');this.core.run(scene);
-    // Do not uncover the canvas until the browser has had an opportunity to paint it.
-    await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
+    this.onStage('STARTING RENDERER...');
+    try{engine.resize()}catch(error){console.error('[FEANK] engine.resize() failed',error);throw error}
+    try{scene.render()}catch(error){console.error('[FEANK] scene.render() failed',error);throw error}
+    console.info('[FEANK] 9 - Starting render loop');
+    try{this.core.run(scene)}catch(error){console.error('[FEANK] EngineManager.run(scene) failed',error);throw error}
+    this.onStage('LOBBY READY');
     // Procedural meshes are ready synchronously. Waiting for Scene.whenReadyAsync here
     // could wait forever on an optional texture/shader and used to block this return.
     console.info('[FEANK] Airport lobby ready',{camera:this.player.camera.position.asArray(),spawnSafe:true,meshes:scene.meshes.length,lights:scene.lights.length,lighting:'sunrise + fill + practical',renderLoops:1});
