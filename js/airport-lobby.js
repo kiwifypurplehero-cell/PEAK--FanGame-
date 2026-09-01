@@ -1,12 +1,12 @@
 import {PlayerController} from './player-controller.js';
-import {InteractionManager} from './interaction-manager.js';
+import {InteractionManager,interactionDistance} from './interaction-manager.js';
 import {TerminalUI} from './terminal-ui.js';
 
 export class AirportLobby {
-  constructor({canvas,prompt,panel}){this.canvas=canvas;this.engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:false});this.scene=this.createScene();this.player=new PlayerController(this.scene,canvas);this.terminalUI=new TerminalUI(panel,this.player);this.interactions=new InteractionManager(this.scene,this.player,prompt,this.terminalUI);this.resize=()=>this.engine.resize();window.addEventListener('resize',this.resize);this.canvas.addEventListener('click',()=>{if(!this.terminalUI.opened)this.canvas.requestPointerLock?.()})}
+  constructor({canvas,prompt,panel}){this.canvas=canvas;this.engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:false});this.terminalUI=null;this.scene=this.createScene();this.player=new PlayerController(this.scene,canvas);this.terminalUI=new TerminalUI(panel,this.player);this.terminalInteraction.action=()=>this.terminalUI.open();this.interactions=new InteractionManager(this.scene,this.player,prompt,this.terminalUI);this.interactions.register(this.terminalInteraction);this.resize=()=>this.engine.resize();window.addEventListener('resize',this.resize);this.canvas.addEventListener('click',()=>{if(!this.terminalUI.opened)this.canvas.requestPointerLock?.()})}
   material(name,color,emissive){const material=new BABYLON.StandardMaterial(name,this.scene);material.diffuseColor=BABYLON.Color3.FromHexString(color);material.specularColor=new BABYLON.Color3(.08,.08,.08);if(emissive)material.emissiveColor=BABYLON.Color3.FromHexString(emissive);return material}
   box(name,size,position,material,collisions=true){const mesh=BABYLON.MeshBuilder.CreateBox(name,{width:size[0],height:size[1],depth:size[2]},this.scene);mesh.position.copyFromFloats(...position);mesh.material=material;mesh.checkCollisions=collisions;return mesh}
-  label(name,text,width,height,position,rotationY=0){const texture=new BABYLON.DynamicTexture(`${name}Texture`,{width:512,height:128},this.scene,false);texture.hasAlpha=true;texture.drawText(text,null,82,'bold 46px Arial','#fff5d8','#526b73',true);const material=new BABYLON.StandardMaterial(`${name}Material`,this.scene);material.diffuseTexture=texture;material.emissiveColor=new BABYLON.Color3(.3,.34,.34);const plane=BABYLON.MeshBuilder.CreatePlane(name,{width,height},this.scene);plane.position.copyFromFloats(...position);plane.rotation.y=rotationY;plane.material=material;plane.isPickable=false;return plane}
+  label(name,text,width,height,position,rotationY=0){const texture=new BABYLON.DynamicTexture(`${name}Texture`,{width:512,height:128},this.scene,false);texture.hasAlpha=true;texture.drawText(text,null,82,'bold 46px Arial','#fff5d8','#526b73',true);const material=new BABYLON.StandardMaterial(`${name}Material`,this.scene);material.diffuseTexture=texture;material.emissiveColor=new BABYLON.Color3(.3,.34,.34);material.backFaceCulling=true;const plane=BABYLON.MeshBuilder.CreatePlane(name,{width,height},this.scene);plane.position.copyFromFloats(...position);plane.rotation.y=rotationY;plane.material=material;plane.isPickable=false;return plane}
   createScene(){
     const scene=new BABYLON.Scene(this.engine);scene.clearColor=new BABYLON.Color4(.58,.75,.85,1);scene.collisionsEnabled=true;scene.gravity=new BABYLON.Vector3(0,-.22,0);
     new BABYLON.HemisphericLight('ambient',new BABYLON.Vector3(0,1,0),scene).intensity=.82;const sun=new BABYLON.DirectionalLight('sun',new BABYLON.Vector3(-.4,-1,.55),scene);sun.intensity=.55;sun.diffuse=new BABYLON.Color3(1,.78,.58);
@@ -22,8 +22,18 @@ export class AirportLobby {
     this.box('gate frame top',[3.8,.35,.45],[-4.6,3.45,5.65],blue);this.box('gate frame left',[.35,3.2,.45],[-6.32,1.7,5.65],blue);this.box('gate frame right',[.35,3.2,.45],[-2.88,1.7,5.65],blue);this.box('closed gate',[3.1,2.9,.3],[-4.6,1.5,5.8],wood);this.label('gate label','EXPEDITION GATE',2.9,.55,[-4.6,3.75,5.43],Math.PI);
     // A restrained plant beside the waiting area.
     this.box('planter',[.75,.65,.75],[6.4,.33,3.9],wood);const trunk=this.box('plant trunk',[.16,1.15,.16],[6.4,1.15,3.9],wood,false);trunk.isPickable=false;for(const offset of [[-.25,1.6,0],[.24,1.48,.08],[0,1.75,.15]]){const leaf=BABYLON.MeshBuilder.CreateSphere('plant leaf',{diameter:.6,segments:6},scene);leaf.position.copyFromFloats(6.4+offset[0],offset[1],3.9+offset[2]);leaf.material=green;leaf.isPickable=false}
-    // Floor-standing self-service terminal, facing the spawn.
-    const root=new BABYLON.TransformNode('terminal root',scene);root.position.copyFromFloats(.7,0,2.5);root.rotation.y=Math.PI;this.box('terminal base',[1.3,.16,.9],[0,.08,0],metal).parent=root;this.box('terminal pedestal',[.42,1.15,.38],[0,.68,0],metal).parent=root;const frame=this.box('terminal frame',[1.65,1.05,.18],[0,1.48,-.08],metal);frame.rotation.x=-.16;frame.parent=root;const display=this.box('terminal interaction screen',[1.43,.83,.035],[0,1.48,-.19],screen,false);display.rotation.x=-.16;display.parent=root;display.metadata={terminalInteraction:true,terminalRoot:root};this.label('terminal text','EXPEDITION TERMINAL  •  MAP SETTINGS',1.25,.31,[.7,1.52,2.68],0);
+    // The terminal's local +Z is its explicit front; one root rotation faces that side toward spawn.
+    const terminalRoot=new BABYLON.TransformNode('TerminalRoot',scene);terminalRoot.position.copyFromFloats(.7,0,2.5);terminalRoot.rotation.y=Math.PI;
+    const addPart=mesh=>{mesh.parent=terminalRoot;mesh.metadata={...(mesh.metadata||{}),terminalRoot};return mesh};
+    addPart(this.box('TerminalBase',[1.3,.16,.9],[0,.08,-.08],metal));
+    addPart(this.box('TerminalPedestal',[.42,1.15,.38],[0,.68,-.14],metal));
+    addPart(this.box('TerminalSupport',[.85,.18,.42],[0,1.11,-.1],metal));
+    const monitorFrame=addPart(this.box('MonitorFrame',[1.65,1.05,.18],[0,1.48,.02],metal));monitorFrame.rotation.x=-BABYLON.Tools.ToRadians(12);
+    const display=this.box('TerminalScreen',[1.43,.83,.035],[0,0,.108],screen,false);display.parent=monitorFrame;display.isPickable=false;
+    const terminalText=this.label('TerminalText','EXPEDITION TERMINAL  •  MAP SETTINGS',1.25,.31,[0,.04,.128]);terminalText.parent=monitorFrame;
+    const interactionCollider=this.box('InteractionCollider',[1.82,1.2,.08],[0,0,.17],metal,false);interactionCollider.parent=monitorFrame;interactionCollider.visibility=0;interactionCollider.isPickable=true;interactionCollider.metadata={terminalInteraction:true,terminalRoot};
+    const interactionAnchor=new BABYLON.TransformNode('InteractionAnchor',scene);interactionAnchor.parent=monitorFrame;interactionAnchor.position.copyFromFloats(0,.76,.08);
+    this.terminalInteraction={id:'expedition-terminal',mesh:interactionCollider,anchor:interactionAnchor,root:terminalRoot,distance:interactionDistance,label:'USE TERMINAL',action:()=>{}};
     return scene;
   }
   start(){this.engine.runRenderLoop(()=>this.scene.render());this.resize();this.canvas.focus()}
