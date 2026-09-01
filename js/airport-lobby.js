@@ -11,29 +11,30 @@ export class AirportLobby {
     const scene=new BABYLON.Scene(this.engine);scene.clearColor=new BABYLON.Color4(.58,.75,.85,1);scene.collisionsEnabled=true;scene.gravity=new BABYLON.Vector3(0,-.22,0);
     new BABYLON.HemisphericLight('ambient',new BABYLON.Vector3(0,1,0),scene).intensity=.82;const sun=new BABYLON.DirectionalLight('sun',new BABYLON.Vector3(-.4,-1,.55),scene);sun.intensity=.55;sun.diffuse=new BABYLON.Color3(1,.78,.58);
     const cream=this.material('cream','#e8ddc6'),floorMat=this.material('floor','#c9bda6'),wood=this.material('wood','#a87952'),blue=this.material('soft blue','#7198a3'),metal=this.material('light metal','#aeb6b3'),screen=this.material('terminal glow','#7caeb0','#376d70'),green=this.material('plant','#6e9468'),sky=this.material('sunrise','#e9ad7b','#75553d');
-    this.box('floor',[15,.25,12],[0,-.125,0],floorMat);this.box('ceiling',[15,.2,12],[0,4.25,0],cream);
-    this.box('west wall',[.25,4.3,12],[-7.5,2.1,0],cream);this.box('east wall',[.25,4.3,12],[7.5,2.1,0],cream);this.box('back wall',[15,4.3,.25],[0,2.1,6],cream);
-    this.box('front wall left',[4.2,4.3,.25],[-5.4,2.1,-6],cream);this.box('front wall right',[4.2,4.3,.25],[5.4,2.1,-6],cream);this.box('window sill',[6.6,.45,.3],[0,.3,-5.92],metal);
-    const glass=this.box('large windows',[6.6,3.5,.08],[0,2.2,-5.91],blue,false);glass.material=this.material('glass','#a8d2dc');glass.material.alpha=.42;glass.isPickable=false;this.box('simple sunrise sky',[7,4,.2],[0,2,-6.45],sky,false).isPickable=false;
-    for(const x of [-6.1,6.1])this.box('pillar',[.55,4.2,.55],[x,2.1,-1],metal);
+    // 18.6 x 15m: 24% wider and 25% deeper than the original 15 x 12m lobby.
+    this.box('floor',[18.6,.25,15],[0,-.125,0],floorMat);this.box('ceiling',[18.6,.2,15],[0,4.25,0],cream);
+    this.box('west wall',[.25,4.3,15],[-9.3,2.1,0],cream);this.box('east wall',[.25,4.3,15],[9.3,2.1,0],cream);this.box('back wall',[18.6,4.3,.25],[0,2.1,7.5],cream);
+    this.box('front wall left',[6,4.3,.25],[-6.3,2.1,-7.5],cream);this.box('front wall right',[6,4.3,.25],[6.3,2.1,-7.5],cream);this.box('window sill',[6.6,.45,.3],[0,.3,-7.42],metal);
+    const glass=this.box('large windows',[6.6,3.5,.08],[0,2.2,-7.41],blue,false);glass.material=this.material('glass','#a8d2dc');glass.material.alpha=.42;glass.isPickable=false;this.box('simple sunrise sky',[7,4,.2],[0,2,-7.95],sky,false).isPickable=false;
+    for(const x of [-7.6,7.6])this.box('pillar',[.55,4.2,.55],[x,2.1,-1],metal);
     // Two compact waiting benches.
-    for(const z of [-.8,1]){this.box('bench seat',[3,.25,.65],[4.7,.65,z],wood);this.box('bench back',[3,.75,.2],[4.7,1.02,z+.28],wood);for(const x of [3.55,5.85])this.box('bench leg',[.18,.65,.18],[x,.32,z],metal)}
+    for(const z of [-1.7,.5,2.7]){this.box('bench seat',[3,.25,.65],[5.8,.65,z],wood);this.box('bench back',[3,.75,.2],[5.8,1.02,z+.28],wood);for(const x of [4.65,6.95])this.box('bench leg',[.18,.65,.18],[x,.32,z],metal)}
     // Decorative expedition gate on the back wall.
-    this.box('gate frame top',[3.8,.35,.45],[-4.6,3.45,5.65],blue);this.box('gate frame left',[.35,3.2,.45],[-6.32,1.7,5.65],blue);this.box('gate frame right',[.35,3.2,.45],[-2.88,1.7,5.65],blue);this.box('closed gate',[3.1,2.9,.3],[-4.6,1.5,5.8],wood);this.label('gate label','EXPEDITION GATE',2.9,.55,[-4.6,3.75,5.43],Math.PI);
+    this.box('gate frame top',[3.8,.35,.45],[-6.1,3.45,7.15],blue);this.box('gate frame left',[.35,3.2,.45],[-7.82,1.7,7.15],blue);this.box('gate frame right',[.35,3.2,.45],[-4.38,1.7,7.15],blue);this.box('closed gate',[3.1,2.9,.3],[-6.1,1.5,7.3],wood);this.label('gate label','EXPEDITION GATE',2.9,.55,[-6.1,3.75,6.93],Math.PI);
     // A restrained plant beside the waiting area.
-    this.box('planter',[.75,.65,.75],[6.4,.33,3.9],wood);const trunk=this.box('plant trunk',[.16,1.15,.16],[6.4,1.15,3.9],wood,false);trunk.isPickable=false;for(const offset of [[-.25,1.6,0],[.24,1.48,.08],[0,1.75,.15]]){const leaf=BABYLON.MeshBuilder.CreateSphere('plant leaf',{diameter:.6,segments:6},scene);leaf.position.copyFromFloats(6.4+offset[0],offset[1],3.9+offset[2]);leaf.material=green;leaf.isPickable=false}
+    this.box('planter',[.75,.65,.75],[8,.33,5.2],wood);const trunk=this.box('plant trunk',[.16,1.15,.16],[8,1.15,5.2],wood,false);trunk.isPickable=false;for(const offset of [[-.25,1.6,0],[.24,1.48,.08],[0,1.75,.15]]){const leaf=BABYLON.MeshBuilder.CreateSphere('plant leaf',{diameter:.6,segments:6},scene);leaf.position.copyFromFloats(8+offset[0],offset[1],5.2+offset[2]);leaf.material=green;leaf.isPickable=false}
     // The terminal's local +Z is its explicit front; one root rotation faces that side toward spawn.
-    const terminalRoot=new BABYLON.TransformNode('TerminalRoot',scene);terminalRoot.position.copyFromFloats(.7,0,2.5);terminalRoot.rotation.y=Math.PI;
+    const terminalRoot=new BABYLON.TransformNode('TerminalRoot',scene);terminalRoot.position.copyFromFloats(1.2,0,3.5);terminalRoot.rotation.y=Math.PI;
     const addPart=mesh=>{mesh.parent=terminalRoot;mesh.metadata={...(mesh.metadata||{}),terminalRoot};return mesh};
     addPart(this.box('TerminalBase',[1.3,.16,.9],[0,.08,-.08],metal));
     addPart(this.box('TerminalPedestal',[.42,1.15,.38],[0,.68,-.14],metal));
     addPart(this.box('TerminalSupport',[.85,.18,.42],[0,1.11,-.1],metal));
     const monitorFrame=addPart(this.box('MonitorFrame',[1.65,1.05,.18],[0,1.48,.02],metal));monitorFrame.rotation.x=-BABYLON.Tools.ToRadians(12);
     const display=this.box('TerminalScreen',[1.43,.83,.035],[0,0,.108],screen,false);display.parent=monitorFrame;display.isPickable=false;
-    const terminalText=this.label('TerminalText','EXPEDITION TERMINAL  •  MAP SETTINGS',1.25,.31,[0,.04,.128]);terminalText.parent=monitorFrame;
+    const terminalText=this.label('TerminalText','EXPEDITION TERMINAL',1.25,.31,[0,.04,.128]);terminalText.parent=monitorFrame;
     const interactionCollider=this.box('InteractionCollider',[1.82,1.2,.08],[0,0,.17],metal,false);interactionCollider.parent=monitorFrame;interactionCollider.visibility=0;interactionCollider.isPickable=true;interactionCollider.metadata={terminalInteraction:true,terminalRoot};
     const interactionAnchor=new BABYLON.TransformNode('InteractionAnchor',scene);interactionAnchor.parent=monitorFrame;interactionAnchor.position.copyFromFloats(0,.76,.08);
-    this.terminalInteraction={id:'expedition-terminal',mesh:interactionCollider,anchor:interactionAnchor,root:terminalRoot,distance:interactionDistance,label:'USE TERMINAL',action:()=>{}};
+    this.terminalInteraction={id:'expedition-terminal',mesh:interactionCollider,anchor:interactionAnchor,root:terminalRoot,distance:interactionDistance,labelKey:'interaction.useTerminal',action:()=>{}};
     return scene;
   }
   start(){this.engine.runRenderLoop(()=>this.scene.render());this.resize();this.canvas.focus()}
