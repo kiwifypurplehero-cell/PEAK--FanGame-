@@ -3,8 +3,10 @@ import {MenuController} from './menu.js';
 import {SettingsController} from './settings.js';
 import {initPixiMenu} from './pixi-menu.js';
 import {AirportLobby} from './airport-lobby.js';
+import {applyTranslations} from './i18n.js';
 
 const scene=document.querySelector('#menu-scene'),overlay=document.querySelector('#overlay');
+applyTranslations();
 const audio=new AudioController();
 const menu=new MenuController({scene,overlay,audio});menu.init();
 new SettingsController(document.querySelector('[data-panel-id="settings"]'),audio).init();
